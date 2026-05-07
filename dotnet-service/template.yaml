@@ -1,1 +1,35 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: dotnet-microservice
+  title: .NET Microservice
+  description: Create and onboard a .NET Web API microservice using Harness
+spec:
+  type: service
+
+  parameters:
+    - title: Service Information
+      required:
+        - service_name
+      properties:
+        service_name:
+          title: Service Name
+          type: string
+          description: Name of the .NET microservice (also GitHub repo name)
+
+  steps:
+    - id: trigger-pipeline
+      name: Trigger DotNet Onboarding Pipeline
+      action: harness:trigger-pipeline
+      input:
+        orgIdentifier: WiproPOC
+        projectIdentifier: CSDemo
+        pipelineIdentifier: dotnetonboardingpipeline
+        inputs:
+          service_name: ${{ parameters.service_name }}
+
+  output:
+    links:
+      - title: GitHub Repository
+        url: https://github.com/jagtappriyanka007/${{ parameters.service_name }}
 
